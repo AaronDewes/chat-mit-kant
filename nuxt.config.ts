@@ -4,5 +4,8 @@ export default defineNuxtConfig({
   modules: ['@nuxt/ui'],
   runtimeConfig: {
     apiKey: process.env.DELPHI_API_KEY,
+  },
+  colorMode: {
+    preference: 'dark'
   }
 })

@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-screen h-screen p-8 gap-2">
-    <div class="flex gap-2 flex-col w-full">
+    <div class="flex gap-2 flex-col w-full flex-grow overflow-scroll">
     <template v-for="message in history" :key="message.id">
       <div v-if="message.sender === 'USER'" class="rounded-md rounded-br-none max-w-3/4 ml-auto flex bg-green-500 p-4">
       <span>{{ message.text }}</span>
