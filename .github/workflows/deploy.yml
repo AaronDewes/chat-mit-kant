@@ -29,6 +29,8 @@ jobs:
           node-version: lts/*
 
       - name: Build step
+        env:
+          DELPHI_AI_KEY: ${{ secrets.DELPHI_AI_KEY }}
         run: "npm install && NITRO_PRESET=deno-deploy npm run build" # 📝 Update the build command(s) if necessary
 
       - name: Upload to Deno Deploy
