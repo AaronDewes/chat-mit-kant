@@ -5,7 +5,9 @@
       <h3 class="text-2xl mb-4">Den Philosophen neu erleben</h3>
       <UButton @click="startConversation">Gespräch beginnen</UButton>
     </div>
-    <span class="mt-auto mb-3 text-sm">Ein Projekt von Aaron Dewes</span>
+    <span class="mt-auto mb-3 text-sm">Ein Projekt von Aaron Dewes - ermöglicht von
+      <a href="https://delphi.ai" class="text-blue-500">delphi.ai</a>
+    </span>
   </div>
 </template>
 
