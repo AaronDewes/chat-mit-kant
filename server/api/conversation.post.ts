@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
             "slug": "immanuel-kant"
         })
     });
+    console.log(await resp.text());
     setResponseStatus(event, 201);
     return await resp.json() as {
         new: {

@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
             "X-Api-Key": useRuntimeConfig().apiKey,
         }
     });
+    console.log(await resp.text());
     setResponseStatus(event, 200);
     return await resp.json() as {
         history: Message[];
