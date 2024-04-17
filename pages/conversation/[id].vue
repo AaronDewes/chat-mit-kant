@@ -73,5 +73,3 @@ function speak(text: string) {
     speechSynthesis.speak(utterance);
 }
 </script>
-
-<style scoped></style>
