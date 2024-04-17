@@ -15,7 +15,6 @@ export default defineEventHandler(async (event) => {
             "user_message": `Bitte beantworte die folgende Frage auf Deutsch, benutze kein Englisch. Gehe in deiner Antwort nicht auf den Text vor den --- ein, sondern beantworte bitte nur die Frage. --- ${body}`
         })
     });
-    console.log(resp.status);
     return await resp.json() as {
         clone_response: {
             "conversation_id": string;
