@@ -76,7 +76,8 @@ async function sendMessage() {
     created_at: new Date().toISOString(),
   });
   // Open a websocket connection to /api/conversation/ws
-  const ws = new WebSocket(`ws://${location.host}/api/ws`);
+  const wsProtocol = location.protocol === "https:" ? "wss" : "ws";
+  const ws = new WebSocket(`${wsProtocol}://${location.host}/api/ws`);
   // Wait for the connection to be established
   await new Promise((resolve) => (ws.onopen = resolve));
   ws.send(JSON.stringify({ id: params.id, body: msg }));
