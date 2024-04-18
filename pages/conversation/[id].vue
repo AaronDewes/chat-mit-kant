@@ -21,7 +21,7 @@
               <span>{{
                 message.text ==
                 "Greetings, I'm Immanuel Kant. What philosophical questions are you pondering today?"
-                  ? "Hallo, ich bin Immanuel Kant. Welche philosophischen Fragen beschäftigen Sie heute?"
+                  ? "Hallo, ich bin Immanuel Kant. Welche Fragen beschäftigen Sie heute?"
                   : message.text
                       .replaceAll(/\[\d+\]/g, "")
                       .replaceAll(" .", ".")
