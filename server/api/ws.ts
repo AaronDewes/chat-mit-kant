@@ -44,7 +44,7 @@ export default defineWebSocketHandler({
         const chunk = chunks[i];
         if (chunk) {
           // If chunk starts with ping - ignore it
-          if (chunk.startsWith("ping -")) {
+          if (chunk.startsWith("ping -") || chunk.startsWith(": ping -")  || chunk.startsWith(" : ping -")) {
             continue;
           }
           // Parse the chunk as JSON
