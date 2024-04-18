@@ -13,7 +13,8 @@
               <span>{{ message.text.replace(MSG_PREFIX, "") }}</span>
             </div>
           </div>
-          <div v-if="message.sender === 'CLONE'" class="mr-auto w-fit pr-8">
+          <div v-if="message.sender === 'CLONE'" class="mr-auto w-fit pr-8 flex gap-2">
+            <img src="~/assets/kant-kopf.svg" class="h-12 rounded-full" />
             <div
               class="rounded-md rounded-bl-none max-w-1/2 bg-teal-600 p-4 mr-8 w-fit msg"
             >
