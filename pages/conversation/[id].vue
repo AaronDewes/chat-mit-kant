@@ -27,6 +27,12 @@
                 ? "Hallo, ich bin Immanuel Kant. Welche philosophischen Fragen beschäftigen Sie heute?"
                 : message.text.replaceAll(/\[\d+\]/g, "").replaceAll(" .", ".")
             }}</span>
+            <div class="lds-ellipsis"   v-if="message.text.length === 0">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </div>
         </template>
       </div>
@@ -69,15 +75,26 @@ async function sendMessage() {
     sender: "USER",
     created_at: new Date().toISOString(),
   });
-  const { clone_response } = await $fetch(`/api/conversation/${params.id}`, {
-    method: "POST",
-    body: JSON.stringify(msg),
-  });
-  clone_response.text = clone_response.text.replaceAll(/\[\d+\]/g, "");
+  // Open a websocket connection to /api/conversation/ws
+  const ws = new WebSocket(`ws://${location.host}/api/ws`);
+  // Wait for the connection to be established
+  await new Promise((resolve) => (ws.onopen = resolve));
+  ws.send(JSON.stringify({ id: params.id, body: msg }));
   history.value.push({
     sender: "CLONE",
-    text: clone_response.text,
-    created_at: clone_response.created_at,
+    text: "",
+    created_at: "",
+  });
+  // The response is sent in chunks over the websocket, we need to wait for the last chunk
+  await new Promise<void>((resolve) => {
+    ws.onmessage = ({ data }: { data: string }) => {
+      if (data === "[DONE]") {
+        ws.close();
+        resolve();
+      } else {
+        history.value[history.value.length - 1].text += data;
+      }
+    };
   });
   loading.value = false;
 }
@@ -95,5 +112,73 @@ async function sendMessage() {
 
 .msg {
   box-shadow: 0px 0px 50px -10px rgba(255, 255, 255, 0.75);
+}
+
+.lds-ellipsis {
+  /* change color here */
+  color: #1c4c5b;
+}
+.lds-ellipsis,
+.lds-ellipsis div {
+  box-sizing: border-box;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  /* change size by scaling */
+  transform: scale(0.4);
+  margin-top: -20px;
+  margin-bottom: -20px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33.33333px;
+  width: 13.33333px;
+  height: 13.33333px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
 }
 </style>

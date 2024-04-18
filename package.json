@@ -12,9 +12,10 @@
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
     "@nuxt/ui": "^2.14.2",
-    "nuxt": "^3.0.0",
+    "nuxt": "^3.11.2",
     "vue": "^3.4.19",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "ufo": "^1.5.3"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.11.4",
