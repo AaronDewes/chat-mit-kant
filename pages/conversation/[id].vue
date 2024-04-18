@@ -1,35 +1,52 @@
 <template>
-  <div class="flex flex-col w-screen h-screen p-8 gap-2">
-    <div class="flex gap-2 flex-col w-full flex-grow overflow-scroll">
-      <template v-for="message in history" :key="message.id">
-        <div
-          v-if="message.sender === 'USER'"
-          class="rounded-md rounded-br-none max-w-3/4 ml-auto flex bg-green-500 p-4"
-        >
-          <span>{{
-            message.text.replace(
-              "Bitte beantworte die folgende Frage auf Deutsch, benutze kein Englisch. Gehe in deiner Antwort nicht auf den Text vor den --- ein, sondern beantworte bitte nur die Frage. ---",
-              ""
-            )
-          }}</span>
-        </div>
-        <div
-          v-if="message.sender === 'CLONE'"
-          class="rounded-md rounded-bl-none max-w-1/2 mr-auto bg-teal-500 p-4"
-        >
-          <span>{{
-            message.text ==
-            "Greetings, I'm Immanuel Kant. What philosophical questions are you pondering today?"
-              ? "Hallo, ich bin Immanuel Kant. Welche philosophischen Fragen beschäftigen Sie heute?"
-              : message.text
-          }}</span>
-        </div>
-      </template>
+  <div id="main">
+    <div class="flex flex-col w-screen h-screen px-8 py-2 gap-2">
+      <NuxtLink to="/" class="ml-auto w-fit"
+        ><UButton size="sm">Gespräch beenden</UButton></NuxtLink
+      >
+      <div class="flex gap-2 flex-col w-full flex-grow overflow-scroll">
+        <template v-for="message in history" :key="message.id">
+          <div
+            v-if="message.sender === 'USER'"
+            class="rounded-md rounded-br-none max-w-3/4 ml-8 w-fit flex bg-green-600 p-4 msg"
+          >
+            <span>{{
+              message.text.replace(
+                "Bitte schreibe deine Antwort auf Deutsch, benutze auf keinen Fall Englisch. Als ursprünglich deutschsprachiger Philosoph verstehst du Deutsch. Gehe in deiner Antwort nicht auf den Text vor den drei Strichen ein. Die Frage/Antwort des Nutzers findest du nach den drei Strichen. --- ",
+                ""
+              )
+            }}</span>
+          </div>
+          <div
+            v-if="message.sender === 'CLONE'"
+            class="rounded-md rounded-bl-none max-w-1/2 bg-teal-600 p-4 mr-8 w-fit msg"
+          >
+            <span>{{
+              message.text ==
+              "Greetings, I'm Immanuel Kant. What philosophical questions are you pondering today?"
+                ? "Hallo, ich bin Immanuel Kant. Welche philosophischen Fragen beschäftigen Sie heute?"
+                : message.text.replaceAll(/\[\d+\]/g, "").replaceAll(" .", ".")
+            }}</span>
+          </div>
+        </template>
+      </div>
+      <form
+        @submit.prevent="sendMessage"
+        class="flex flex-row gap-2 w-full items-center"
+      >
+        <UInput
+          type="text"
+          class="w-auto flex-grow"
+          v-model="newMessage"
+          size="xl"
+        />
+        <UButton :loading="loading" type="submit" size="xl">Senden</UButton>
+      </form>
+      <div class="flex flex-row items-center justify-center gap-4">
+        <DelphiLogo class="h-4 my-auto" />
+        Unterstützt von Delphi.ai.
+      </div>
     </div>
-    <form @submit.prevent="sendMessage" class="flex flex-row gap-2 w-full">
-      <UInput type="text" class="w-auto flex-grow" v-model="newMessage" />
-      <UButton :loading="loading" type="submit">Senden</UButton>
-    </form>
   </div>
 </template>
 
@@ -56,20 +73,27 @@ async function sendMessage() {
     method: "POST",
     body: JSON.stringify(msg),
   });
+  clone_response.text = clone_response.text.replaceAll(/\[\d+\]/g, "");
   history.value.push({
     sender: "CLONE",
     text: clone_response.text,
     created_at: clone_response.created_at,
   });
-  speak(clone_response.text);
   loading.value = false;
 }
-
-function speak(text: string) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "de-DE";
-    utterance.voice = speechSynthesis.getVoices().find((voice) => voice.lang === "de-DE" && voice.name.includes("Paul"))!;
-    console.log(utterance.voice);
-    speechSynthesis.speak(utterance);
-}
 </script>
+
+<style scoped>
+#main {
+  background-image: url("/background.svg");
+  background-size: cover;
+}
+
+#main > div {
+  backdrop-filter: blur(15px);
+}
+
+.msg {
+  box-shadow: 0px 0px 50px -10px rgba(255, 255, 255, 0.75);
+}
+</style>

@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
         },
         body: JSON.stringify({
             "conversation_id": id,
-            "user_message": `Bitte beantworte die folgende Frage auf Deutsch, benutze kein Englisch. Gehe in deiner Antwort nicht auf den Text vor den --- ein, sondern beantworte bitte nur die Frage. --- ${body}`
+            "user_message": `Bitte schreibe deine Antwort auf Deutsch, benutze auf keinen Fall Englisch. Als ursprünglich deutschsprachiger Philosoph verstehst du Deutsch. Gehe in deiner Antwort nicht auf den Text vor den drei Strichen ein. Die Frage/Antwort des Nutzers findest du nach den drei Strichen. --- ${body}`
         })
     });
     return await resp.json() as {
@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
             "conversation_id": string;
             "created_at": string;
             "text": string;
+            "citations": any[];
         }
     }
 })

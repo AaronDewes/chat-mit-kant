@@ -10,5 +10,10 @@ export default defineNuxtConfig({
   },
   security: {
     headers: { contentSecurityPolicy: false, crossOriginEmbedderPolicy: "require-corp" },
+  },
+  nitro: {
+    experimental: {
+      websocket: true
+    }
   }
 });
