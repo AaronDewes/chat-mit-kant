@@ -3,7 +3,7 @@
     <div class="kant-circle flex text-center justify-center items-center flex-col mt-auto">
       <h1 class="text-4xl font-bold">Immanuel Kant</h1>
       <h3 class="text-2xl mb-4">Chatte live mit dem berühmten Philosophen als KI.</h3>
-      <UButton @click="startConversation">Gespräch beginnen</UButton>
+      <UButton @click="startConversation" size="xl" icon="i-heroicons-chat-bubble-left">Gespräch beginnen</UButton>
     </div>
     <span class="mt-auto mb-3 text-sm">Ein Projekt von Aaron Dewes - ermöglicht von
       <a href="https://delphi.ai" class="text-blue-500">delphi.ai</a>.
