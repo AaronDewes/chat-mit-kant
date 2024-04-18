@@ -6,32 +6,31 @@
       >
       <div class="flex gap-2 flex-col w-full flex-grow overflow-scroll">
         <template v-for="message in history" :key="message.id">
-          <div
-            v-if="message.sender === 'USER'"
-            class="rounded-md rounded-br-none max-w-3/4 ml-8 w-fit flex bg-green-600 p-4 msg"
-          >
-            <span>{{
-              message.text.replace(
-                "Bitte schreibe deine Antwort auf Deutsch, benutze auf keinen Fall Englisch. Als ursprünglich deutschsprachiger Philosoph verstehst du Deutsch. Gehe in deiner Antwort nicht auf den Text vor den drei Strichen ein. Die Frage/Antwort des Nutzers findest du nach den drei Strichen. --- ",
-                ""
-              )
-            }}</span>
+          <div v-if="message.sender === 'USER'" class="ml-auto w-fit pl-8">
+            <div
+              class="rounded-md rounded-br-none max-w-3/4 ml-8 w-fit flex bg-green-600 p-4 msg"
+            >
+              <span>{{ message.text.replace(MSG_PREFIX, "") }}</span>
+            </div>
           </div>
-          <div
-            v-if="message.sender === 'CLONE'"
-            class="rounded-md rounded-bl-none max-w-1/2 bg-teal-600 p-4 mr-8 w-fit msg"
-          >
-            <span>{{
-              message.text ==
-              "Greetings, I'm Immanuel Kant. What philosophical questions are you pondering today?"
-                ? "Hallo, ich bin Immanuel Kant. Welche philosophischen Fragen beschäftigen Sie heute?"
-                : message.text.replaceAll(/\[\d+\]/g, "").replaceAll(" .", ".")
-            }}</span>
-            <div class="lds-ellipsis"   v-if="message.text.length === 0">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
+          <div v-if="message.sender === 'CLONE'" class="mr-auto w-fit pr-8">
+            <div
+              class="rounded-md rounded-bl-none max-w-1/2 bg-teal-600 p-4 mr-8 w-fit msg"
+            >
+              <span>{{
+                message.text ==
+                "Greetings, I'm Immanuel Kant. What philosophical questions are you pondering today?"
+                  ? "Hallo, ich bin Immanuel Kant. Welche philosophischen Fragen beschäftigen Sie heute?"
+                  : message.text
+                      .replaceAll(/\[\d+\]/g, "")
+                      .replaceAll(" .", ".")
+              }}</span>
+              <div class="lds-ellipsis" v-if="message.text.length === 0">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </div>
           </div>
         </template>
@@ -58,6 +57,7 @@
 
 <script setup lang="ts">
 import type { Message } from "~/server/types";
+import { MSG_PREFIX } from "~/utils/consts";
 
 const { params } = useRoute();
 const { data } = await useFetch(`/api/conversation/${params.id}`);

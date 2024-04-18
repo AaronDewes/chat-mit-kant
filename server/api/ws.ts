@@ -1,3 +1,5 @@
+import { MSG_PREFIX } from "~/utils/consts";
+
 export default defineWebSocketHandler({
   open(peer) {
     console.log("[ws] open", peer);
@@ -19,13 +21,14 @@ export default defineWebSocketHandler({
         },
         body: JSON.stringify({
           conversation_id: id,
-          user_message: `Bitte schreibe deine Antwort auf Deutsch, benutze auf keinen Fall Englisch. Als ursprünglich deutschsprachiger Philosoph verstehst du Deutsch. Gehe in deiner Antwort nicht auf den Text vor den drei Strichen ein. Die Frage/Antwort des Nutzers findest du nach den drei Strichen. --- ${body}`,
+          user_message: `${MSG_PREFIX}${body}`,
           stream: true,
         }),
       }
     );
     // Continously stream the response to the client
     const reader = resp.body!.getReader();
+    let buffer = "";
     while (true) {
       const { done, value } = await reader.read();
       if (done) {
@@ -34,9 +37,11 @@ export default defineWebSocketHandler({
       // Split the response into chunks, each chunk starts with data:
       // There can be multiple chunks in a single response
       const text = new TextDecoder("iso-8859-2").decode(value);
-      const chunks = text.split("data:");
-      // Send each chunk without the data: prefix
-      for (const chunk of chunks) {
+      buffer += text;
+      // Split the buffer into chunks by the data: prefix, only keep the last one in there as it might be incomplete
+      const chunks = buffer.split("data:");
+      for (let i = 0; i < chunks.length; i++) {
+        const chunk = chunks[i];
         if (chunk) {
           // If chunk starts with ping - ignore it
           if (chunk.startsWith("ping -")) {
@@ -46,9 +51,15 @@ export default defineWebSocketHandler({
           try {
             const parsed = JSON.parse(chunk);
             peer.send(parsed.current_token);
+            if (i === chunks.length - 1) {
+              buffer = "";
+            }
           } catch (e) {
             console.log("Failed to parse chunk as JSON", chunk);
             console.error(e);
+            if (i === chunks.length - 1) {
+              buffer = chunk;
+            }
           }
         }
       }
