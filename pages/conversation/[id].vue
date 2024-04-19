@@ -29,7 +29,8 @@
               <span
                 v-if="
                   !message.text.includes('request') &&
-                  !message.text.includes('English')
+                  !message.text.includes('English') &&
+                  !message.text.includes('I\'m')
                 "
                 >{{
                   message.text.trim() ==
