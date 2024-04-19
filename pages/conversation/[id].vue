@@ -35,7 +35,7 @@
                 Guten Tag, hier Immanuel Kant. Was beschäftigt Sie heute?
               </span>
               <span
-                v-else-if="isInvalidMsg(cleanMsg(message.text)) && !loading"
+                v-else-if="isInvalidMsg(cleanMsg(message.text)) && (!loading || lastMsgId !== message.id)"
               >
                 {{ randomError() }}
                 <DevOnly>
