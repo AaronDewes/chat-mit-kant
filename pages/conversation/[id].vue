@@ -28,24 +28,28 @@
             >
               <span
                 v-if="
-                  !message.text.includes('request') &&
-                  !message.text.includes('English') &&
-                  !message.text.includes('I\'m')
-                "
-                >{{
                   message.text.trim() ==
-                  "Greetings, I'm Immanuel Kant. What philosophical questions are you pondering today?"
-                    ? "Guten Tag, hier Immanuel Kant. Was beschäftigt Sie heute?"
-                    : message.text
-                        .trim()
-                        .replaceAll(/\[\d+\]/g, "")
-                        .replaceAll(" .", ".")
-                }}</span
+                  'Greetings, I\'m Immanuel Kant. What philosophical questions are you pondering today?'
+                "
               >
-              <span v-else>
+                Guten Tag, hier Immanuel Kant. Was beschäftigt Sie heute?
+              </span>
+              <span
+                v-else-if="
+                  message.text.includes('request') &&
+                  message.text.includes('English') &&
+                  message.text.includes('I\'m')
+                "
+              >
                 In Königsberg ist gerade das WLAN zusammengebrochen, wie
                 unpreußisch! Bitte stellen Sie Ihre Frage erneut.
               </span>
+              <span v-else>{{
+                message.text
+                  .trim()
+                  .replaceAll(/\[\d+\]/g, "")
+                  .replaceAll(" .", ".")
+              }}</span>
               <div class="lds-ellipsis" v-if="message.text.length === 0">
                 <div></div>
                 <div></div>
