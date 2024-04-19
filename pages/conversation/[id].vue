@@ -35,25 +35,27 @@
                 Guten Tag, hier Immanuel Kant. Was beschäftigt Sie heute?
               </span>
               <span
-                v-else-if="
-                  message.text.includes('request') ||
-                  message.text.includes('English') ||
-                  message.text.includes('I\'m')
-                "
+                v-else-if="isInvalidMsg(cleanMsg(message.text)) && !loading"
               >
                 In Königsberg ist gerade das WLAN zusammengebrochen, wie
                 unpreußisch! Bitte stellen Sie Ihre Frage erneut.
-              <DevOnly>
-                {{  message.text }}
-              </DevOnly>
+                <DevOnly>
+                  {{ message.text }}
+                </DevOnly>
               </span>
-              <span v-else>{{
+              <span v-else-if="!isInvalidMsg(cleanMsg(message.text))">{{
                 message.text
                   .trim()
                   .replaceAll(/\[\d+\]/g, "")
                   .replaceAll(" .", ".")
               }}</span>
-              <div class="lds-ellipsis" v-if="message.text.length === 0">
+              <div
+                class="lds-ellipsis"
+                v-if="
+                  message.text.length === 0 ||
+                  (loading && isInvalidMsg(cleanMsg(message.text)) && lastMsgId === message.id)
+                "
+              >
                 <div></div>
                 <div></div>
                 <div></div>
@@ -131,6 +133,24 @@ async function sendMessage() {
   });
   loading.value = false;
 }
+
+function cleanMsg(msg: string) {
+  return msg
+    .trim()
+    .replaceAll("I'm sorry, but I can't comply with that request.", "");
+}
+
+function isInvalidMsg(msg: string) {
+  return (
+    msg.length === 0 ||
+    msg.includes("request") ||
+    msg.includes("English") ||
+    msg.includes("I'm") ||
+    msg.length === 0
+  );
+}
+
+const lastMsgId = computed(() => history.value[history.value.length - 1].id);
 </script>
 
 <style scoped>
