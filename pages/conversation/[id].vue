@@ -36,13 +36,16 @@
               </span>
               <span
                 v-else-if="
-                  message.text.includes('request') &&
-                  message.text.includes('English') &&
+                  message.text.includes('request') ||
+                  message.text.includes('English') ||
                   message.text.includes('I\'m')
                 "
               >
                 In Königsberg ist gerade das WLAN zusammengebrochen, wie
                 unpreußisch! Bitte stellen Sie Ihre Frage erneut.
+              <DevOnly>
+                {{  message.text }}
+              </DevOnly>
               </span>
               <span v-else>{{
                 message.text
