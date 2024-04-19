@@ -13,19 +13,32 @@
               <span>{{ message.text.replace(MSG_PREFIX, "") }}</span>
             </div>
           </div>
-          <div v-if="message.sender === 'CLONE'" class="mr-auto w-fit pr-8 flex gap-2">
+          <div
+            v-if="message.sender === 'CLONE'"
+            class="mr-auto w-fit pr-8 flex gap-2"
+          >
             <img src="~/assets/kant-kopf.svg" class="h-12 rounded-full" />
             <div
               class="rounded-md rounded-bl-none max-w-1/2 bg-teal-600 p-4 mr-8 w-fit msg"
             >
-              <span>{{
-                message.text ==
-                "Greetings, I'm Immanuel Kant. What philosophical questions are you pondering today?"
-                  ? "Guten Tag, hier Immanuel Kant. Was beschäftigt Sie heute?"
-                  : message.text
-                      .replaceAll(/\[\d+\]/g, "")
-                      .replaceAll(" .", ".")
-              }}</span>
+              <span
+                v-if="
+                  message.text !==
+                  'I\'m sorry, but I can\'t comply with that request. '
+                "
+                >{{
+                  message.text ==
+                  "Greetings, I'm Immanuel Kant. What philosophical questions are you pondering today?"
+                    ? "Guten Tag, hier Immanuel Kant. Was beschäftigt Sie heute?"
+                    : message.text
+                        .replaceAll(/\[\d+\]/g, "")
+                        .replaceAll(" .", ".")
+                }}</span
+              >
+              <span v-else>
+                In Königsberg ist gerade das WLAN zusammengebrochen, wie
+                unpreußisch! Bitte stellen Sie Ihre Frage erneut.
+              </span>
               <div class="lds-ellipsis" v-if="message.text.length === 0">
                 <div></div>
                 <div></div>

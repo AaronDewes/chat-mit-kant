@@ -9,7 +9,7 @@
       <img src="~/assets/badge_300_jahre_kant.png" class="w-48 mb-4" />
       <h1 class="text-4xl font-bold">Immanuel Kant</h1>
       <h3 class="text-2xl mb-4">
-        Chatte live mit dem berühmten Philosophen als KI.
+        Live-Chat zum 300. Geburtstag des großen Denkers
       </h3>
       <UButton
         @click="startConversation"
