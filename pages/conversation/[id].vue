@@ -50,7 +50,7 @@
       </form>
       <div class="flex flex-row items-center justify-center gap-4">
         <DelphiLogo class="h-4 my-auto" />
-        Unterstützt von Delphi.ai.
+        Ermöglicht von Delphi.ai.
       </div>
     </div>
   </div>
