@@ -37,8 +37,7 @@
               <span
                 v-else-if="isInvalidMsg(cleanMsg(message.text)) && !loading"
               >
-                In Königsberg ist gerade das WLAN zusammengebrochen, wie
-                unpreußisch! Bitte stellen Sie Ihre Frage erneut.
+                {{ randomError() }}
                 <DevOnly>
                   {{ message.text }}
                 </DevOnly>
@@ -53,7 +52,9 @@
                 class="lds-ellipsis"
                 v-if="
                   message.text.length === 0 ||
-                  (loading && isInvalidMsg(cleanMsg(message.text)) && lastMsgId === message.id)
+                  (loading &&
+                    isInvalidMsg(cleanMsg(message.text)) &&
+                    lastMsgId === message.id)
                 "
               >
                 <div></div>
@@ -151,6 +152,16 @@ function isInvalidMsg(msg: string) {
 }
 
 const lastMsgId = computed(() => history.value[history.value.length - 1].id);
+
+const errorMessages = [
+  "In Königsberg ist gerade das WLAN zusammengebrochen, wie unpreußisch! Bitte stellen Sie Ihre Frage erneut.",
+  "Ordnung und Disziplin sind die Grundlage des preußischen Staates, aber scheinbar nicht dieses Computers. Bitte entschuldigen Sie die Unannehmlichkeiten und stellen Sie Ihre Frage bitte erneut.",
+  "Das Ding an sich ist unerkennbar, ebenso wie der Grund für dieses technische Problem. Bitte stellen Sie Ihre Frage erneut.",
+];
+
+function randomError() {
+  return errorMessages[Math.floor(Math.random() * errorMessages.length)];
+}
 </script>
 
 <style scoped>

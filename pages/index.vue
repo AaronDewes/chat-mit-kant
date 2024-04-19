@@ -20,7 +20,7 @@
       >
     </div>
     <span class="mt-auto mb-3 text-lg bg-slate-700/50 p-4 rounded-lg"
-      >Ein Projekt von Aaron Dewes - ermöglicht von <DelphiLogo class="h-3 inline mr-1 my-auto" /><a
+      >Ein Projekt von Aaron Dewes in Zusammenarbeit mit <DelphiLogo class="h-3 inline mr-1 my-auto" /><a
         href="https://delphi.ai"
         class="text-blue-500"
         >delphi.ai</a
