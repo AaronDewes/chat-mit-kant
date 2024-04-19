@@ -6,7 +6,11 @@
       >
       <div class="flex gap-2 flex-col w-full flex-grow overflow-scroll">
         <template v-for="message in history" :key="message.id">
-          <div v-if="message.sender === 'USER'" class="ml-auto w-fit pl-8">
+          <div
+            v-if="message.sender === 'USER'"
+            class="ml-auto w-fit pl-8"
+            :id="message.id"
+          >
             <div
               class="rounded-md rounded-br-none max-w-3/4 ml-8 w-fit flex bg-green-600 p-4 msg"
             >
@@ -16,6 +20,7 @@
           <div
             v-if="message.sender === 'CLONE'"
             class="mr-auto w-fit pr-8 flex gap-2"
+            :id="message.id"
           >
             <img src="~/assets/kant-kopf.svg" class="h-12 rounded-full" />
             <div
@@ -23,14 +28,15 @@
             >
               <span
                 v-if="
-                  message.text !==
-                  'I\'m sorry, but I can\'t comply with that request. '
+                  !message.text.includes('request') &&
+                  !message.text.includes('English')
                 "
                 >{{
-                  message.text ==
+                  message.text.trim() ==
                   "Greetings, I'm Immanuel Kant. What philosophical questions are you pondering today?"
                     ? "Guten Tag, hier Immanuel Kant. Was beschäftigt Sie heute?"
                     : message.text
+                        .trim()
                         .replaceAll(/\[\d+\]/g, "")
                         .replaceAll(" .", ".")
                 }}</span
@@ -75,7 +81,9 @@ import { MSG_PREFIX } from "~/utils/consts";
 
 const { params } = useRoute();
 const { data } = await useFetch(`/api/conversation/${params.id}`);
-const history = ref<Message[]>(data.value!.history);
+const history = ref<Message[]>(
+  data.value!.history.map((item) => ({ ...item, id: crypto.randomUUID() }))
+);
 const newMessage = ref("");
 const loading = ref(false);
 
@@ -88,6 +96,7 @@ async function sendMessage() {
     text: msg,
     sender: "USER",
     created_at: new Date().toISOString(),
+    id: crypto.randomUUID(),
   });
   // Open a websocket connection to /api/conversation/ws
   const wsProtocol = location.protocol === "https:" ? "wss" : "ws";
@@ -99,6 +108,7 @@ async function sendMessage() {
     sender: "CLONE",
     text: "",
     created_at: "",
+    id: crypto.randomUUID(),
   });
   // The response is sent in chunks over the websocket, we need to wait for the last chunk
   await new Promise<void>((resolve) => {
