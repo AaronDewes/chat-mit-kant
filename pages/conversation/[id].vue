@@ -40,7 +40,7 @@
                   (!loading || lastMsgId !== message.id)
                 "
               >
-                {{ randomError() }}
+                {{ randomError(message.id) }}
                 <DevOnly>
                   {{ message.text }}
                 </DevOnly>
@@ -168,8 +168,16 @@ const errorMessages = [
   "Das Ding an sich ist unerkennbar, ebenso wie der Grund für dieses technische Problem. Bitte stellen Sie Ihre Frage erneut.",
 ];
 
-function randomError() {
-  return errorMessages[Math.floor(Math.random() * errorMessages.length)];
+function seededRandomNumber(seed: string) {
+  // Convert to string to bytes, and use these bytes as seed for the PRNG
+  const seedArray = new TextEncoder().encode(seed);
+  const seedNumber = seedArray.reduce((acc, byte) => acc * byte, 1);
+  // Turn that into a number between 0 and 1
+  return (seedNumber % 1000) / 1000;
+}
+
+function randomError(seed: string) {
+  return errorMessages[Math.floor(seededRandomNumber(seed) * errorMessages.length)];
 }
 </script>
 
