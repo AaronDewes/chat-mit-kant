@@ -143,7 +143,11 @@ async function sendMessage() {
 function cleanMsg(msg: string) {
   return msg
     .trim()
-    .replaceAll("I'm sorry, but I can't comply with that request.", "");
+    .replaceAll("I'm sorry, but I can't comply with that request. ", "")
+    .replaceAll(
+      "I'm sorry, but I can't provide the response you're asking for. ",
+      ""
+    );
 }
 
 function isInvalidMsg(msg: string) {
