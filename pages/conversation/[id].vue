@@ -35,7 +35,10 @@
                 Guten Tag, hier Immanuel Kant. Was beschäftigt Sie heute?
               </span>
               <span
-                v-else-if="isInvalidMsg(cleanMsg(message.text)) && (!loading || lastMsgId !== message.id)"
+                v-else-if="
+                  isInvalidMsg(cleanMsg(message.text)) &&
+                  (!loading || lastMsgId !== message.id)
+                "
               >
                 {{ randomError() }}
                 <DevOnly>
@@ -43,10 +46,12 @@
                 </DevOnly>
               </span>
               <span v-else-if="!isInvalidMsg(cleanMsg(message.text))">{{
-                message.text
-                  .trim()
-                  .replaceAll(/\[\d+\]/g, "")
-                  .replaceAll(" .", ".")
+                cleanMsg(
+                  message.text
+                    .trim()
+                    .replaceAll(/\[\d+\]/g, "")
+                    .replaceAll(" .", ".")
+                )
               }}</span>
               <div
                 class="lds-ellipsis"
