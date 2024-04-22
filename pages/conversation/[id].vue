@@ -156,6 +156,8 @@ function isInvalidMsg(msg: string) {
     msg.includes("request") ||
     msg.includes("English") ||
     msg.includes("I'm") ||
+    msg.includes("I must") ||
+    msg.includes("confess") ||
     msg.length === 0
   );
 }
